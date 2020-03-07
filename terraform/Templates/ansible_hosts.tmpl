@@ -1,0 +1,7 @@
+[locust_master]
+${master_ip}
+
+[locust_slaves]
+%{ for ip in slave_ips ~}
+${ip}
+%{ endfor ~}

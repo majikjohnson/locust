@@ -15,7 +15,7 @@ module "locust_network" {
 module "locust_security_groups" {
   source = "./Modules/SecurityGroups"
 
-  vpc_id         = module.locust_network.vpc_id
+  vpc_id      = module.locust_network.vpc_id
   master_name = "locust-master"
   slave_name  = "locust-slave"
 }
@@ -37,7 +37,7 @@ module "locust_slaves" {
   source = "./Modules/Servers"
 
   locust_role        = "slave"
-  server_count       = 2
+  server_count       = var.slave_count
   ami                = var.locust_ami
   instance_type      = var.locust_slave_instance_type
   key_name           = aws_key_pair.terraform_key.key_name
@@ -45,4 +45,36 @@ module "locust_slaves" {
   security_group_ids = [module.locust_security_groups.id_slave]
 }
 
+data "aws_instance" "locust_master" {
+  filter {
+    name   = "tag:Name"
+    values = ["master"]
+  }
+  depends_on = [
+    module.locust_master
+  ]
+}
+
+data "aws_instances" "locust_slaves" {
+  filter {
+    name   = "tag:Name"
+    values = ["slave"]
+  }
+  depends_on = [
+    module.locust_slaves
+  ]
+}
+
+resource "local_file" "ansible_hosts" {
+  content = templatefile("Templates/ansible_hosts.tmpl", {
+    master_ip = data.aws_instance.locust_master.public_ip,
+    slave_ips = data.aws_instances.locust_slaves.public_ips
+  })
+  filename = "hosts"
+  depends_on = [
+    data.aws_instance.locust_master,
+    data.aws_instances.locust_slaves
+
+  ]
+}
 

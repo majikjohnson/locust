@@ -22,3 +22,9 @@ variable "locust_slave_instance_type" {
   default     = "t2.micro"
 }
 
+variable "slave_count" {
+  description = "Number of locust slave nodes to initialise"
+  type        = number
+  default     = 2
+}
+
