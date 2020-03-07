@@ -1,0 +1,10 @@
+# Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+
+# Don't add private key to the repo
+terraform1
+
