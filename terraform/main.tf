@@ -15,33 +15,33 @@ module "locust_vpc" {
 module "locust_security_groups" {
   source = "./Modules/SecurityGroups"
 
-  vpc_id = module.locust_vpc.vpc_id
+  vpc_id         = module.locust_vpc.vpc_id
   master_sg_name = "locust-master"
-  slave_sg_name = "locust-slave"
+  slave_sg_name  = "locust-slave"
 }
 
 module "locust_master" {
   source = "./Modules/Servers"
 
-  locust_role = "master"
-  server_count = 1
-  ami = var.locust_ami
-  instance_type = var.locust_master_instance_type
-  key_name = aws_key_pair.terraform_key.key_name
-  subnet_id = module.locust_vpc.subnet_id
+  locust_role        = "master"
+  server_count       = 1
+  ami                = var.locust_ami
+  instance_type      = var.locust_master_instance_type
+  key_name           = aws_key_pair.terraform_key.key_name
+  subnet_id          = module.locust_vpc.subnet_id
   security_group_ids = [module.locust_security_groups.sg_id_locust_master]
-  
+
 }
 
 module "locust_slaves" {
   source = "./Modules/Servers"
 
-  locust_role = "slave"
-  server_count = 2
-  ami = var.locust_ami
-  instance_type = var.locust_slave_instance_type
-  key_name = aws_key_pair.terraform_key.key_name
-  subnet_id = module.locust_vpc.subnet_id
+  locust_role        = "slave"
+  server_count       = 2
+  ami                = var.locust_ami
+  instance_type      = var.locust_slave_instance_type
+  key_name           = aws_key_pair.terraform_key.key_name
+  subnet_id          = module.locust_vpc.subnet_id
   security_group_ids = [module.locust_security_groups.sg_id_locust_slave]
 }
 

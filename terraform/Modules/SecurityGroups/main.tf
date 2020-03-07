@@ -1,5 +1,5 @@
 resource "aws_security_group" "locust_master" {
-  name = var.master_sg_name
+  name   = var.master_sg_name
   vpc_id = var.vpc_id
 
   ingress {
@@ -28,7 +28,7 @@ resource "aws_security_group" "locust_master" {
 }
 
 resource "aws_security_group" "locust_slave" {
-  name = var.slave_sg_name
+  name   = var.slave_sg_name
   vpc_id = var.vpc_id
 
   ingress {
