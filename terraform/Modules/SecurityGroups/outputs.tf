@@ -1,7 +1,7 @@
-output "sg_id_locust_master" {
+output "id_master" {
   value = aws_security_group.locust_master.id
 }
 
-output "sg_id_locust_slave" {
+output "id_slave" {
   value = aws_security_group.locust_slave.id
 }
